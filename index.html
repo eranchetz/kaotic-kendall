@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 <title>Kaotic Kendall — Office Chaos</title>
 <style>
   :root{
@@ -149,6 +149,10 @@
     position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
     background:#000b; color:#fff; padding:8px 12px; border-radius:8px; font-weight:700; display:none;
   }
+  /* Mobile tweaks: prevent zoom/select/callout on interactive UI */
+  * { -webkit-tap-highlight-color: transparent; }
+  html, body, #game, .task, .btn, #hud, header { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+  .btn, .task { touch-action: manipulation; }
 </style>
 </head>
 <body>
@@ -469,6 +473,27 @@ window.addEventListener('keydown', (e)=>{ if(e.code==='Space'){ e.preventDefault
 
 /* Accessibility: enable audio on first interaction on iOS */
 window.addEventListener('pointerdown', ()=>{ if(!audioCtx) try{audioCtx = new (window.AudioContext||window.webkitAudioContext)();}catch{} }, {once:true});
+
+/* ---- Mobile hardening: block double-tap zoom, pinch-zoom, text selection & callout ---- */
+(function(){
+  const opts = { passive: false };
+  // Block pinch-zoom and multi-touch gestures from triggering zoom
+  document.addEventListener('touchstart', (e)=>{ if(e.touches.length > 1) e.preventDefault(); }, opts);
+  // Block double-tap to zoom
+  let lastTouchEnd = 0;
+  document.addEventListener('touchend', (e)=>{
+    const t = Date.now();
+    if(t - lastTouchEnd <= 350) e.preventDefault();
+    lastTouchEnd = t;
+  }, opts);
+  // iOS Safari specific
+  document.addEventListener('gesturestart', (e)=> e.preventDefault());
+  // Prevent long-press context/select UI
+  document.addEventListener('contextmenu', (e)=> e.preventDefault());
+  document.addEventListener('selectstart', (e)=> e.preventDefault());
+  // Prevent dblclick zoom on some browsers
+  document.addEventListener('dblclick', (e)=> e.preventDefault(), opts);
+})();
 </script>
 </body>
 </html>
