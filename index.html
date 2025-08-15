@@ -158,7 +158,7 @@
 <body>
   <div class="wrap">
     <header>
-      <div class="tag">They’re just not doing their job!</div>
+      <div class="tag">They’re just not doing their job! Let's unshitfy the process💩</div>
       <div class="title">KAOTIC KENDALL — OFFICE CHAOS</div>
     </header>
 
@@ -167,6 +167,7 @@
       <div class="pill">Time: <span id="time" class="stat">60</span>s</div>
       <div class="bar" title="Energy (keep it up!)"><i id="energyFill"></i></div>
       <div class="bar stress" title="Stress (don’t let it fill!)"><i id="stressFill"></i></div>
+      <button id="muteBtn" class="btn" aria-label="Toggle sound" aria-pressed="false">Mute 🔇</button>
       <button id="pauseBtn" class="btn" aria-label="Pause">Pause</button>
     </div>
 
@@ -203,21 +204,44 @@ const startScreen = document.getElementById('startScreen');
 const gameOverEl = document.getElementById('gameOver');
 const finalStatsEl = document.getElementById('finalStats');
 const pauseBtn = document.getElementById('pauseBtn');
+const muteBtn = document.getElementById('muteBtn');
+const settings = { muted: JSON.parse(localStorage.getItem('kk_muted')||'false') };
 const toast = document.getElementById('toast');
 
 let audioCtx;
-const now = ()=> audioCtx ? audioCtx.currentTime : 0;
-function beep({freq=600, duration=0.07, type='square', gain=0.03}={}){
+const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+async function ensureAudio(){
+  if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});
+  if(audioCtx.state === 'suspended') { try { await audioCtx.resume(); } catch {} }
+  return audioCtx;
+}
+function unlockAudioOnce(){
+  if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});
   try{
-    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    // Play a tiny silent buffer to unlock sound on iOS Safari
+    const buffer = audioCtx.createBuffer(1, 4410, 44100); // ~0.1s
+    const src = audioCtx.createBufferSource();
+    src.buffer = buffer;
+    src.connect(audioCtx.destination);
+    src.start(0);
+    setTimeout(()=>{ try{src.stop(); src.disconnect();}catch{} }, 120);
+  }catch{}
+}
+async function beep({freq=600, duration=0.08, type='square', gain=0.05}={}){
+  try{
+    await ensureAudio();
+    if (settings && settings.muted) return;
     const t = audioCtx.currentTime;
     const o = audioCtx.createOscillator();
     const g = audioCtx.createGain();
     o.type = type;
     o.frequency.setValueAtTime(freq, t);
-    g.gain.value = gain;
+    g.gain.setValueAtTime(gain, t);
+    // Quick envelope avoids clicks and improves Safari audibility
+    g.gain.linearRampToValueAtTime(gain, t + 0.005);
+    g.gain.linearRampToValueAtTime(0.0001, t + Math.max(0.02, duration-0.01));
     o.connect(g).connect(audioCtx.destination);
-    o.start();
+    o.start(t);
     o.stop(t + duration);
   }catch{}
 }
@@ -469,6 +493,20 @@ function toastMsg(msg){
 document.getElementById('startBtn').addEventListener('click', startGame);
 document.getElementById('restartBtn').addEventListener('click', startGame);
 pauseBtn.addEventListener('click', togglePause);
+
+// Mute toggle
+function updateMuteLabel(){
+  muteBtn.textContent = settings.muted ? 'Unmute 🔊' : 'Mute 🔇';
+  muteBtn.setAttribute('aria-pressed', settings.muted ? 'true' : 'false');
+}
+muteBtn.addEventListener('click', ()=>{
+  settings.muted = !settings.muted;
+  localStorage.setItem('kk_muted', settings.muted);
+  updateMuteLabel();
+  toastMsg(settings.muted ? 'Muted' : 'Sound on');
+});
+updateMuteLabel();
+
 window.addEventListener('keydown', (e)=>{ if(e.code==='Space'){ e.preventDefault(); togglePause(); }});
 
 /* Accessibility: enable audio on first interaction on iOS */
@@ -494,6 +532,20 @@ window.addEventListener('pointerdown', ()=>{ if(!audioCtx) try{audioCtx = new (w
   // Prevent dblclick zoom on some browsers
   document.addEventListener('dblclick', (e)=> e.preventDefault(), opts);
 })();
+
+// Robust audio unlock for iOS Safari and resume on visibility changes
+(function(){
+  const once = ()=>{ try{ unlockAudioOnce(); }catch{} ensureAudio(); remove(); };
+  const events = ['pointerdown','touchend','click','keydown'];
+  function remove(){ events.forEach(ev=> window.removeEventListener(ev, once, true)); }
+  events.forEach(ev=> window.addEventListener(ev, once, {once:true, capture:true}));
+})();
+
+document.addEventListener('visibilitychange', ()=>{
+  if(document.visibilityState==='visible' && audioCtx && audioCtx.state==='suspended'){
+    audioCtx.resume().catch(()=>{});
+  }
+});
 </script>
 </body>
 </html>
