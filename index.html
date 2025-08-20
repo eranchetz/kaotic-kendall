@@ -5,154 +5,49 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 <title>Kaotic Kendall — Office Chaos</title>
 <style>
-  :root{
-    --orange:#ea5b1b;
-    --orange-dark:#c24611;
-    --cream:#ffe5c7;
-    --ink:#15202b;
-    --gold:#ffcf4d;
-    --brown:#7b4b2a;
-    --green:#1fbf72;
-    --red:#ff3d3d;
-  }
-  html,body{height:100%;margin:0;font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";}
-  body{
-    color:#111;
-    /* Poster-style burst background */
-    background:
-      radial-gradient(ellipse at center, rgba(255,255,255,0.06) 0 30%, transparent 31%),
-      repeating-conic-gradient(from 0deg, rgba(255,255,255,0.12) 0 6deg, transparent 6deg 12deg),
-      radial-gradient(circle at 50% 35%, #f27b3e 0 40%, transparent 41%),
-      linear-gradient(180deg, var(--orange) 0%, var(--orange-dark) 100%);
-    background-blend-mode: soft-light, normal, normal, normal;
-  }
-  /* Layout */
-  .wrap{
-    max-width: 960px;
-    margin: 0 auto;
-    height:100%;
-    display:flex;
-    flex-direction:column;
-    padding: 16px;
-    box-sizing:border-box;
-  }
-
-  header{
-    text-align:center;
-    color:#ffe8d5;
-    text-shadow: 0 2px 0 #0008, -1px -1px 0 #0008, 1px -1px 0 #0008, -1px 1px 0 #0008, 1px 1px 0 #0008;
-    letter-spacing: .5px;
-  }
-  .title{
-    font-weight: 900;
-    font-size: clamp(28px, 6.5vw, 56px);
-    margin:4px 0 2px;
-  }
-  .tag{
-    font-weight: 800;
-    font-size: clamp(12px,2.8vw,18px);
-    margin: 0 0 6px;
-  }
-
-  #hud{
-    display:flex; gap:10px; align-items:center; justify-content:space-between;
-    background: rgba(255,255,255,.15);
-    border: 2px solid #0004;
-    border-radius: 10px;
-    padding: 8px 10px;
-    box-shadow: inset 0 2px 0 #fff2, 0 6px 0 #0002;
-    color:#fff;
-    text-shadow: 0 1px 0 #0009;
-    user-select:none;
-  }
+  :root{--orange:#ea5b1b;--orange-dark:#c24611;--cream:#ffe5c7;--ink:#15202b;--gold:#ffcf4d;--brown:#7b4b2a;--green:#1fbf72;--red:#ff3d3d}
+  html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"}
+  body{color:#111;background:radial-gradient(ellipse at center,rgba(255,255,255,.06) 0 30%,transparent 31%),repeating-conic-gradient(from 0deg,rgba(255,255,255,.12) 0 6deg,transparent 6deg 12deg),radial-gradient(circle at 50% 35%,#f27b3e 0 40%,transparent 41%),linear-gradient(180deg,var(--orange) 0%,var(--orange-dark) 100%);background-blend-mode:soft-light,normal,normal,normal}
+  .wrap{max-width:960px;margin:0 auto;height:100%;display:flex;flex-direction:column;padding:16px;box-sizing:border-box}
+  header{text-align:center;color:#ffe8d5;text-shadow:0 2px 0 #0008,-1px -1px 0 #0008,1px -1px 0 #0008,-1px 1px 0 #0008,1px 1px 0 #0008;letter-spacing:.5px}
+  .title{font-weight:900;font-size:clamp(28px,6.5vw,56px);margin:4px 0 2px}
+  .tag{font-weight:800;font-size:clamp(12px,2.8vw,18px);margin:0 0 6px}
+  #hud{display:flex;gap:10px;align-items:center;justify-content:space-between;background:rgba(255,255,255,.15);border:2px solid #0004;border-radius:10px;padding:8px 10px;box-shadow:inset 0 2px 0 #fff2,0 6px 0 #0002;color:#fff;text-shadow:0 1px 0 #0009;user-select:none}
   .pill{display:inline-flex;align-items:center;gap:8px;padding:4px 8px;border-radius:999px;background:#0005}
   .stat{font-weight:800}
-  .bar{
-    position:relative; height:14px; width:min(360px,40vw);
-    background:#0006; border-radius:999px; overflow:hidden; border:1px solid #0007;
-  }
-  .bar>i{display:block; height:100%; width:0%; background:linear-gradient(90deg, #74e39a, #1fbf72); transition:width .15s}
-  .bar.stress>i{background:linear-gradient(90deg, #ffb347, #ff3d3d);}
-  #game{
-    position:relative; flex:1; margin-top:10px; overflow:hidden;
-    border: 4px solid #0006; border-radius: 16px;
-    background: radial-gradient(circle at 70% 10%, #ffddb9 0, #fec794 25%, #f7a269 50%, #f07d41 70%, #e15f23 100%);
-    box-shadow: inset 0 10px 0 #fff3, inset 0 -10px 0 #0001, 0 16px 0 #0002;
-    touch-action: none; /* enables PointerEvents gestures */
-  }
-
-  /* Buttons / overlays */
-  .btn{
-    background: linear-gradient(#ffd86b, #ffb347);
-    border: 0; padding: 12px 18px; border-radius: 10px;
-    font-weight: 900; letter-spacing:.5px; cursor:pointer;
-    box-shadow: 0 4px 0 #b46f00, inset 0 2px 0 #fff7;
-  }
-  .btn:active{ transform: translateY(2px); box-shadow: 0 2px 0 #b46f00, inset 0 2px 0 #fff7; }
-
-  #startScreen, #gameOver{
-    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    background: linear-gradient(180deg, #00000090, #000000b5);
-    color:#fff; text-align:center; padding: 24px; gap:14px;
-    z-index: 1000;
-  }
-  #startScreen h1, #gameOver h1{margin:0;text-shadow:0 2px 0 #000;}
+  .bar{position:relative;height:14px;width:min(360px,40vw);background:#0006;border-radius:999px;overflow:hidden;border:1px solid #0007}
+  .bar>i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#74e39a,#1fbf72);transition:width .15s}
+  .bar.stress>i{background:linear-gradient(90deg,#ffb347,#ff3d3d)}
+  #game{position:relative;flex:1;margin-top:10px;overflow:hidden;border:4px solid #0006;border-radius:16px;background:radial-gradient(circle at 70% 10%,#ffddb9 0,#fec794 25%,#f7a269 50%,#f07d41 70%,#e15f23 100%);box-shadow:inset 0 10px 0 #fff3,inset 0 -10px 0 #0001,0 16px 0 #0002;touch-action:none}
+  #game::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.7),rgba(255,255,255,0) 60%);transition:opacity .2s}
+  #game.flash::after{opacity:.45}
+  .btn{background:linear-gradient(#ffd86b,#ffb347);border:0;padding:12px 18px;border-radius:10px;font-weight:900;letter-spacing:.5px;cursor:pointer;box-shadow:0 4px 0 #b46f00,inset 0 2px 0 #fff7}
+  .btn:active{transform:translateY(2px);box-shadow:0 2px 0 #b46f00,inset 0 2px 0 #fff7}
+  #startScreen,#gameOver,#pauseOverlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(180deg,#00000090,#000000b5);color:#fff;text-align:center;padding:24px;gap:14px;z-index:1000}
+  #startScreen h1,#gameOver h1{margin:0;text-shadow:0 2px 0 #000}
   .kbd{background:#fff2;padding:2px 6px;border-radius:6px;border:1px solid #fff3}
-
-  /* Task items */
-  .task{
-    position:absolute;
-    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:4px;
-    min-width:72px; min-height:72px; width:84px; height:84px; border-radius:14px;
-    border: 2px solid #0007;
-    box-shadow: 0 6px 0 #0002, inset 0 2px 0 #fff8;
-    background:#fff8;
-    user-select:none;
-    transform: scale(.95);
-    animation: pop-in .12s ease-out forwards;
-  }
+  .task{position:absolute;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;min-width:72px;min-height:72px;width:84px;height:84px;border-radius:14px;border:2px solid #0007;box-shadow:0 6px 0 #0002,inset 0 2px 0 #fff8;background:#fff8;user-select:none;transform:scale(.95);animation:pop-in .12s ease-out forwards}
   @keyframes pop-in{to{transform:scale(1)}}
-  .task .icon{font-size:38px; line-height:1}
-  .task .label{font-size:12px; font-weight:800; color:#333; text-shadow:0 1px 0 #fff}
-  .task .ring{
-    position:absolute; inset:-6px; border-radius:16px; border:6px solid #0000; pointer-events:none;
-    --c: #0000 60%, #ffe66a 0 70%, #0000 0;
-    background:
-      conic-gradient(var(--c)),
-      conic-gradient(var(--c));
-    background-size:50% 100%; background-repeat:no-repeat; opacity:.85;
-  }
-  .task.phone{background:#fff; border-color:#1d3557; }
-  .task.laptop{background:#fff; border-color:#9b2226;}
-  .task.coworker{background:#fff; border-color:#264653;}
-  .task.spill{background: #e6d3c5; border-color:#5a3b23;}
+  .task .icon{font-size:38px;line-height:1}
+  .task .label{font-size:12px;font-weight:800;color:#333;text-shadow:0 1px 0 #fff}
+  .task .ring{position:absolute;inset:-6px;border-radius:16px;border:6px solid #0000;pointer-events:none;--c:#0000 60%,#ffe66a 0 70%,#0000 0;background:conic-gradient(var(--c)),conic-gradient(var(--c));background-size:50% 100%;background-repeat:no-repeat;opacity:.85}
+  .task.phone{background:#fff;border-color:#1d3557}
+  .task.laptop{background:#fff;border-color:#9b2226}
+  .task.coworker{background:#fff;border-color:#264653}
+  .task.spill{background:#e6d3c5;border-color:#5a3b23}
   .shake{animation:shake .2s linear 3}
   @keyframes shake{25%{transform:translateX(-3px)}50%{transform:translateX(3px)}75%{transform:translateX(-3px)}}
-
-  /* Mini progress for hold/scrub */
-  .progress{
-    position:absolute; left:8px; right:8px; bottom:6px; height:8px; border-radius:999px;
-    background:#0002; border:1px solid #0003; overflow:hidden;
-  }
-  .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg, var(--gold), #ff6a3d); transition: width .06s;}
-
-  /* Coffee spill visual */
-  .spill .blob{
-    position:absolute; width:60px; height:40px; border-radius:50% 43% 55% 52% / 60% 40% 60% 45%;
-    background: radial-gradient(circle at 35% 35%, #85522f, #6d3f22 55%, #5b3520 100%);
-    filter: drop-shadow(0 3px 0 #0002);
-    transform: rotate(-7deg);
-  }
-
-  /* Toaster notifications */
-  #toast{
-    position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
-    background:#000b; color:#fff; padding:8px 12px; border-radius:8px; font-weight:700; display:none;
-  }
-  /* Mobile tweaks: prevent zoom/select/callout on interactive UI */
-  * { -webkit-tap-highlight-color: transparent; }
-  html, body, #game, .task, .btn, #hud, header { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
-  .btn, .task { touch-action: manipulation; }
+  .progress{position:absolute;left:8px;right:8px;bottom:6px;height:8px;border-radius:999px;background:#0002;border:1px solid #0003;overflow:hidden}
+  .progress>i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--gold),#ff6a3d);transition:width .06s}
+  .spill .blob{position:absolute;width:60px;height:40px;border-radius:50% 43% 55% 52%/60% 40% 60% 45%;background:radial-gradient(circle at 35% 35%,#85522f,#6d3f22 55%,#5b3520 100%);filter:drop-shadow(0 3px 0 #0002);transform:rotate(-7deg)}
+  #toast{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:#000b;color:#fff;padding:8px 12px;border-radius:8px;font-weight:700;display:none}
+  #toast.big{font-size:24px;padding:12px 16px;border:2px solid #fff3}
+  #fxLayer{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:900}
+  .particle{position:absolute;width:8px;height:8px;border-radius:50%;opacity:1;will-change:transform,opacity}
+  .float{position:absolute;left:0;top:0;transform:translate(-50%,-50%);font-weight:900;color:#fff;text-shadow:0 2px 0 #0008,0 0 8px #0008;opacity:1;will-change:transform,opacity;transition:transform .6s ease-out, opacity .6s ease-out}
+  *{-webkit-tap-highlight-color:transparent}
+  html,body,#game,.task,.btn,#hud,header{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+  .btn,.task{touch-action:manipulation}
 </style>
 </head>
 <body>
@@ -161,7 +56,6 @@
       <div class="tag">They’re just not doing their job! Let's unshitfy the process💩</div>
       <div class="title">KAOTIC KENDALL — OFFICE CHAOS</div>
     </header>
-
     <div id="hud">
       <div class="pill">Score: <span id="score" class="stat">0</span></div>
       <div class="pill">Time: <span id="time" class="stat">60</span>s</div>
@@ -170,7 +64,6 @@
       <button id="muteBtn" class="btn" aria-label="Toggle sound" aria-pressed="false">Mute 🔇</button>
       <button id="pauseBtn" class="btn" aria-label="Pause">Pause</button>
     </div>
-
     <div id="game" aria-label="Game field">
       <div id="startScreen">
         <h1>Be Kendall. Beat the Chaos.</h1>
@@ -181,8 +74,13 @@
           <li><b>Coworkers</b> 🙉 — tap 3× to calm.</li>
           <li><b>Coffee spills</b> ☕ — click/drag to scrub clean.</li>
         </ul>
-        <div>Hints: <span class="kbd">Space</span> to pause. Difficulty rises every 15 s.</div>
+        <div>Hints: <span class="kbd">Space</span> to pause. Difficulty rises over time.</div>
         <button id="startBtn" class="btn" style="font-size:18px">Start Game</button>
+      </div>
+      <div id="pauseOverlay" style="display:none">
+        <h1>Paused</h1>
+        <div>Game is paused</div>
+        <button id="resumeBtn" class="btn" style="font-size:18px">Resume</button>
       </div>
       <div id="gameOver" style="display:none">
         <h1>Game Over</h1>
@@ -190,362 +88,66 @@
         <button id="restartBtn" class="btn" style="font-size:18px">Play Again</button>
       </div>
       <div id="toast"></div>
+      <div id="fxLayer"></div>
     </div>
   </div>
-
 <script>
-/* ========= Core Game State ========= */
-const gameEl = document.getElementById('game');
-const scoreEl = document.getElementById('score');
-const timeEl = document.getElementById('time');
-const energyFill = document.getElementById('energyFill');
-const stressFill = document.getElementById('stressFill');
-const startScreen = document.getElementById('startScreen');
-const gameOverEl = document.getElementById('gameOver');
-const finalStatsEl = document.getElementById('finalStats');
-const pauseBtn = document.getElementById('pauseBtn');
-const muteBtn = document.getElementById('muteBtn');
-const settings = { muted: JSON.parse(localStorage.getItem('kk_muted')||'false') };
-const toast = document.getElementById('toast');
-
-let audioCtx;
-const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-async function ensureAudio(){
-  if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});
-  if(audioCtx.state === 'suspended') { try { await audioCtx.resume(); } catch {} }
-  return audioCtx;
-}
-function unlockAudioOnce(){
-  if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});
+const gameEl=document.getElementById('game');
+const fxLayer=document.getElementById('fxLayer');
+const scoreEl=document.getElementById('score');
+const timeEl=document.getElementById('time');
+const energyFill=document.getElementById('energyFill');
+const stressFill=document.getElementById('stressFill');
+const startScreen=document.getElementById('startScreen');
+const gameOverEl=document.getElementById('gameOver');
+const pauseOverlay=document.getElementById('pauseOverlay');
+const resumeBtn=document.getElementById('resumeBtn');
+const finalStatsEl=document.getElementById('finalStats');
+const pauseBtn=document.getElementById('pauseBtn');
+const muteBtn=document.getElementById('muteBtn');
+const settings={muted:JSON.parse(localStorage.getItem('kk_muted')||'false'),best:JSON.parse(localStorage.getItem('kk_best')||'0')};
+const toast=document.getElementById('toast');
+let audioCtx;const isSafari=/^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+async function ensureAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});if(audioCtx.state==='suspended'){try{await audioCtx.resume()}catch{}}return audioCtx}
+function unlockAudioOnce(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});try{const buffer=audioCtx.createBuffer(1,4410,44100);const src=audioCtx.createBufferSource();src.buffer=buffer;src.connect(audioCtx.destination);src.start(0);setTimeout(()=>{try{src.stop();src.disconnect()}catch{}},120)}catch{}}
+async function beep({freq=600,duration=0.08,type='square',gain=0.05}={}){try{await ensureAudio();if(settings&&settings.muted)return;const t=audioCtx.currentTime;const o=audioCtx.createOscillator();const g=audioCtx.createGain();o.type=type;o.frequency.setValueAtTime(freq,t);g.gain.setValueAtTime(gain,t);g.gain.linearRampToValueAtTime(gain,t+0.005);g.gain.linearRampToValueAtTime(0.0001,t+Math.max(0.02,duration-0.01));o.connect(g).connect(audioCtx.destination);o.start(t);o.stop(t+duration)}catch{}}
+const RAND=(min,max)=>Math.random()*(max-min)+min;
+const state={running:false,paused:false,score:0,time:60,stress:10,energy:100,baseSpawnMs:3000,spawnMs:3000,minSpawnMs:450,speedK:0.05,playTimeMs:0,nextSpeedToast:10000,tasks:new Set(),timers:new Set()};
+function reset(){state.running=false;state.paused=false;state.score=0;state.time=60;state.stress=10;state.energy=100;state.baseSpawnMs=3000;state.spawnMs=3000;state.minSpawnMs=450;state.speedK=0.05;state.playTimeMs=0;state.nextSpeedToast=10000;scoreEl.textContent=state.score;timeEl.textContent=state.time;energyFill.style.width=state.energy+'%';stressFill.style.width=state.stress+'%';[...state.tasks].forEach(t=>t.destroy(true));state.tasks.clear();state.timers.forEach(id=>{clearTimeout(id);clearInterval(id)});state.timers.clear()}
+const TYPES={phone:{emoji:'📞',label:'Answer!',ttl:4200,reward:8,penalty:13,init(task){task.el.addEventListener('pointerdown',()=>{if(state.paused)return;task.resolve()})}},laptop:{emoji:'💻',label:'Fix bug',ttl:6200,reward:15,penalty:16,holdNeeded:900,init(task){const prog=document.createElement('div');prog.className='progress';const fill=document.createElement('i');prog.appendChild(fill);task.el.appendChild(prog);let accumulated=0,lastTime=0,rAF=null;const needed=task.spec.holdNeeded;const onDown=e=>{if(state.paused)return;e.preventDefault();accumulated=0;lastTime=performance.now();const loop=()=>{const nowT=performance.now();if(!state.paused){accumulated+=(nowT-lastTime);const pct=Math.min(100,accumulated/needed*100);fill.style.width=pct+'%';if(pct>=100){rAF=null;task.resolve();return}}lastTime=nowT;rAF=requestAnimationFrame(loop)};rAF=requestAnimationFrame(loop)};const onUp=()=>{if(rAF)cancelAnimationFrame(rAF);rAF=null;fill.style.width='0%'};task.el.addEventListener('pointerdown',onDown);window.addEventListener('pointerup',onUp);task.onDestroy=()=>window.removeEventListener('pointerup',onUp)}},coworker:{emoji:'🙉',label:'Calm 3×',ttl:5400,reward:12,penalty:14,init(task){let taps=0;task.el.addEventListener('pointerdown',()=>{if(state.paused)return;taps++;task.pulse();beep({freq:450+taps*60,duration:.05,type:'sine',gain:.02});if(taps>=3)task.resolve();else task.setLabel(`Calm ${3-taps}×`)})}},spill:{emoji:'☕',label:'Scrub!',ttl:5000,reward:10,penalty:12,init(task){const blob=document.createElement('div');blob.className='blob';task.el.appendChild(blob);const prog=document.createElement('div');prog.className='progress';const fill=document.createElement('i');prog.appendChild(fill);task.el.appendChild(prog);let scrubbing=false,dist=0,last=null;const onDown=e=>{if(state.paused)return;scrubbing=true;last=[e.clientX,e.clientY]};const onMove=e=>{if(state.paused)return;if(!scrubbing)return;const d=Math.hypot(e.clientX-last[0],e.clientY-last[1]);last=[e.clientX,e.clientY];dist+=d;fill.style.width=Math.min(100,dist/180*100)+'%';if(dist>=180)task.resolve()};const onUp=()=>scrubbing=false;task.el.addEventListener('pointerdown',onDown);task.el.addEventListener('pointermove',onMove);window.addEventListener('pointerup',onUp);task.onDestroy=()=>window.removeEventListener('pointerup',onUp)}}};
+class Task{constructor(type){this.type=type;this.spec=TYPES[type];this.created=performance.now();this.deadline=this.created+this.spec.ttl;this.el=document.createElement('div');this.el.className=`task ${type}`;this.el.style.left=Math.round(RAND(6,gameEl.clientWidth-100))+'px';this.el.style.top=Math.round(RAND(6,gameEl.clientHeight-100))+'px';const ring=document.createElement('div');ring.className='ring';this.el.appendChild(ring);const icon=document.createElement('div');icon.className='icon';icon.textContent=this.spec.emoji;const label=document.createElement('div');label.className='label';label.textContent=this.spec.label;this.el.append(icon,label);gameEl.appendChild(this.el);state.tasks.add(this);this.expireId=setTimeout(()=>this.fail(),this.spec.ttl);state.timers.add(this.expireId);this.spec.init(this)}setLabel(text){this.el.querySelector('.label').textContent=text}pulse(){this.el.classList.remove('shake');void this.el.offsetWidth;this.el.classList.add('shake')}resolve(){if(this.resolved)return;this.resolved=true;clearTimeout(this.expireId);state.timers.delete(this.expireId);addScore(this.spec.reward);adjustEnergy(3);adjustStress(-5);const r=this.el.getBoundingClientRect();const g=gameEl.getBoundingClientRect();vfxBurst(r.left-g.left+r.width/2,r.top-g.top+r.height/2,'success');floatText(r.left-g.left+r.width/2,r.top-g.top,'+'+this.spec.reward);beep({freq:760,duration:.09,type:'triangle',gain:.035});this.destroy()}fail(){if(this.resolved)return;clearTimeout(this.expireId);state.timers.delete(this.expireId);this.pulse();adjustStress(this.spec.penalty);adjustEnergy(-6);const r=this.el.getBoundingClientRect();const g=gameEl.getBoundingClientRect();vfxBurst(r.left-g.left+r.width/2,r.top-g.top+r.height/2,'fail');screenShake(6,180);if(navigator.vibrate)try{navigator.vibrate(30)}catch{};beep({freq:220,duration:.12,type:'sawtooth',gain:.04});this.destroy()}destroy(instantly){if(this.onDestroy)try{this.onDestroy()}catch{};state.tasks.delete(this);if(instantly){this.el.remove();return}this.el.style.transition='transform .14s, opacity .14s';this.el.style.transform='scale(.8) rotate(-6deg)';this.el.style.opacity='0';setTimeout(()=>this.el.remove(),160)}pause(){if(this.expireId){clearTimeout(this.expireId);state.timers.delete(this.expireId);this.expireId=null}const now=performance.now();this.remaining=Math.max(0,(this.deadline||(this.created+this.spec.ttl))-now)}resume(){if(this.resolved)return;const rem=this.remaining!=null?this.remaining:this.spec.ttl;this.deadline=performance.now()+rem;this.expireId=setTimeout(()=>this.fail(),rem);state.timers.add(this.expireId)}}
+function pauseAllTasks(){state.tasks.forEach(t=>t.pause&&t.pause())}
+function resumeAllTasks(){state.tasks.forEach(t=>t.resume&&t.resume())}
+function spawnOne(){if(!state.running||state.paused)return;const r=Math.random();const type=r<.28?'phone':r<.52?'laptop':r<.78?'coworker':'spill';new Task(type)}
+function addScore(n){state.score+=n;scoreEl.textContent=state.score}
+function adjustStress(n){state.stress=Math.max(0,Math.min(100,state.stress+n));stressFill.style.width=state.stress+'%';if(state.stress>=100)return endGame('Stress overload! The office imploded.')}
+function adjustEnergy(n){state.energy=Math.max(0,Math.min(100,state.energy+n));energyFill.style.width=state.energy+'%'}
+function startGame(){reset();startScreen.style.display='none';gameOverEl.style.display='none';state.running=true;beep({freq:520,duration:.14,type:'sine',gain:.05});const secTimer=setInterval(()=>{if(!state.running||state.paused)return;state.time--;timeEl.textContent=state.time;if(state.time<=0)endGame('Shift complete. Chaos contained.')},1000);let last=performance.now();let lastSpawnT=last;const firstId=setTimeout(()=>{if(!state.running||state.paused)return;spawnOne();lastSpawnT=performance.now();},250);state.timers.add(firstId);requestAnimationFrame(function tick(){if(!state.running)return;const t=performance.now();const dt=t-last;if(!state.paused){state.playTimeMs+=dt;state.spawnMs=Math.max(state.minSpawnMs,state.baseSpawnMs*Math.exp(-state.speedK*(state.playTimeMs/1000)));if(state.playTimeMs>=state.nextSpeedToast){toastBig('Speed up!');if(navigator.vibrate)try{navigator.vibrate(20)}catch{};gameEl.classList.add('flash');setTimeout(()=>gameEl.classList.remove('flash'),200);state.nextSpeedToast+=10000}if((t-lastSpawnT)>=state.spawnMs){spawnOne();lastSpawnT=t}}last=t;requestAnimationFrame(tick)});state.timers.add(secTimer)}
+function endGame(reason){state.running=false;const isBest=state.score>Number(settings.best||0);if(isBest){settings.best=String(state.score);localStorage.setItem('kk_best',settings.best);for(let i=0;i<6;i++){setTimeout(()=>{vfxBurst(RAND(40,gameEl.clientWidth-40),RAND(40,gameEl.clientHeight-40),'success')},i*140)}}gameOverEl.style.display='flex';finalStatsEl.innerHTML=`<p>${reason}</p><p><b>Score:</b> ${state.score} &nbsp; • &nbsp; <b>Time left:</b> ${state.time}s ${isBest?'• <b>New best!</b>':''}</p>`}
+function togglePause(){if(!state.running)return;state.paused=!state.paused;pauseBtn.textContent=state.paused?'Resume':'Pause';if(state.paused){pauseAllTasks();pauseOverlay.style.display='flex'}else{resumeAllTasks();pauseOverlay.style.display='none'}toastMsg(state.paused?'Paused':'Resume');beep({freq:state.paused?300:600,duration:.06,type:'square',gain:.03})}
+function toastMsg(msg){toast.classList.remove('big');toast.textContent=msg;toast.style.display='block';toast.style.opacity='1';clearTimeout(toast._id);toast._id=setTimeout(()=>{toast.style.transition='opacity .5s';toast.style.opacity='0';setTimeout(()=>{toast.style.display='none';toast.style.transition=''},520)},700)}
+function toastBig(msg){toast.classList.add('big');toastMsg(msg)}
+function vfxBurst(x,y,mode){const colors=mode==='fail'?['#ff3d3d','#ff7a6b','#ffd2d2']:['#ffcf4d','#ffffff','#1fbf72','#ffe5c7'];const count=mode==='fail'?12:16;for(let i=0;i<count;i++){const p=document.createElement('div');p.className='particle';const s=RAND(6,11);p.style.width=s+'px';p.style.height=s+'px';p.style.background=colors[Math.floor(Math.random()*colors.length)];p.style.left=(x)+'px';p.style.top=(y)+'px';p.style.transform='translate(-50%,-50%) scale(1)';p.style.opacity='1';fxLayer.appendChild(p);
+    const dx=(Math.random()-.5)*180;const dy=(Math.random()-.5)*180;const rot=(Math.random()-.5)*260;requestAnimationFrame(()=>{p.style.transition='transform .6s cubic-bezier(.15,.65,.25,1), opacity .6s';p.style.transform=`translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) rotate(${rot}deg) scale(.6)`;p.style.opacity='0'});setTimeout(()=>p.remove(),620)}}
+function floatText(x,y,text){const f=document.createElement('div');f.className='float';f.textContent=text;f.style.left=x+'px';f.style.top=y+'px';fxLayer.appendChild(f);requestAnimationFrame(()=>{f.style.transform='translate(-50%,-110%)';f.style.opacity='0'});setTimeout(()=>f.remove(),640)}
+function screenShake(intensity=6,duration=180){const start=performance.now();(function loop(){const t=performance.now()-start;if(t>=duration){gameEl.style.transform='';return}const dx=(Math.random()*2-1)*intensity;const dy=(Math.random()*2-1)*intensity;gameEl.style.transform=`translate(${dx}px, ${dy}px)`;requestAnimationFrame(loop)})()}
+document.getElementById('startBtn').addEventListener('click',startGame);document.getElementById('restartBtn').addEventListener('click',startGame);pauseBtn.addEventListener('click',togglePause);resumeBtn.addEventListener('click',togglePause);
+function updateMuteLabel(){muteBtn.textContent=settings.muted?'Unmute 🔊':'Mute 🔇';muteBtn.setAttribute('aria-pressed',settings.muted?'true':'false')}
+muteBtn.addEventListener('click',()=>{settings.muted=!settings.muted;localStorage.setItem('kk_muted',settings.muted);updateMuteLabel();toastMsg(settings.muted?'Muted':'Sound on')});updateMuteLabel();
+window.addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();togglePause()}});
+window.addEventListener('pointerdown',()=>{if(!audioCtx)try{audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch{}},{once:true});
+(function(){const opts={passive:false};document.addEventListener('touchstart',e=>{if(e.touches.length>1)e.preventDefault()},opts);let lastTouchEnd=0;document.addEventListener('touchend',e=>{const t=Date.now();if(t-lastTouchEnd<=350)e.preventDefault();lastTouchEnd=t},opts);document.addEventListener('gesturestart',e=>e.preventDefault());document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('selectstart',e=>e.preventDefault());document.addEventListener('dblclick',e=>e.preventDefault(),opts)})();
+(function(){const once=()=>{try{unlockAudioOnce()}catch{}ensureAudio();remove()};const events=['pointerdown','touchend','click','keydown'];function remove(){events.forEach(ev=>window.removeEventListener(ev,once,true))}events.forEach(ev=>window.addEventListener(ev,once,{once:true,capture:true}))})();
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&audioCtx&&audioCtx.state==='suspended'){audioCtx.resume().catch(()=>{})}});
+(function selfTests(){
   try{
-    // Play a tiny silent buffer to unlock sound on iOS Safari
-    const buffer = audioCtx.createBuffer(1, 4410, 44100); // ~0.1s
-    const src = audioCtx.createBufferSource();
-    src.buffer = buffer;
-    src.connect(audioCtx.destination);
-    src.start(0);
-    setTimeout(()=>{ try{src.stop(); src.disconnect();}catch{} }, 120);
-  }catch{}
-}
-async function beep({freq=600, duration=0.08, type='square', gain=0.05}={}){
-  try{
-    await ensureAudio();
-    if (settings && settings.muted) return;
-    const t = audioCtx.currentTime;
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.type = type;
-    o.frequency.setValueAtTime(freq, t);
-    g.gain.setValueAtTime(gain, t);
-    // Quick envelope avoids clicks and improves Safari audibility
-    g.gain.linearRampToValueAtTime(gain, t + 0.005);
-    g.gain.linearRampToValueAtTime(0.0001, t + Math.max(0.02, duration-0.01));
-    o.connect(g).connect(audioCtx.destination);
-    o.start(t);
-    o.stop(t + duration);
-  }catch{}
-}
-
-const RAND = (min,max)=> Math.random()*(max-min)+min;
-const CHANCE = p=> Math.random()<p;
-
-const state = {
-  running:false, paused:false,
-  score:0, time:60,
-  stress:10, energy:100,
-  spawnMs:3000, minSpawnMs:450,
-  lastSpawn:0, levelTick:0,
-  tasks:new Set(),
-  timers:new Set()
-};
-
-function reset(){
-  state.running=false; state.paused=false;
-  state.score=0; state.time=60;
-  state.stress=10; state.energy=100;
-  state.spawnMs=1500; state.minSpawnMs=600; state.levelTick=0;
-  scoreEl.textContent=state.score;
-  timeEl.textContent=state.time;
-  energyFill.style.width = state.energy + '%';
-  stressFill.style.width = state.stress + '%';
-  // clear tasks/timers
-  [...state.tasks].forEach(t=>t.destroy(true));
-  state.tasks.clear();
-  state.timers.forEach(id=>clearInterval(id) || clearTimeout(id));
-  state.timers.clear();
-}
-
-/* ========= Task Factory ========= */
-const TYPES = {
-  phone:{
-    emoji:'📞', label:'Answer!', ttl: 4200, reward: 8, penalty: 13,
-    init(task){
-      task.el.addEventListener('pointerdown', ()=> task.resolve());
-    }
-  },
-  laptop:{
-    emoji:'💻', label:'Fix bug', ttl: 6200, reward: 15, penalty: 16,
-    holdNeeded: 900, // ms
-    init(task){
-      const prog = document.createElement('div'); prog.className='progress';
-      const fill = document.createElement('i'); prog.appendChild(fill);
-      task.el.appendChild(prog);
-      let holdStart=0, rAF=null;
-      const onDown = (e)=>{
-        e.preventDefault();
-        holdStart = performance.now();
-        const loop = ()=>{
-          const pct = Math.min(100, (performance.now()-holdStart)/this.holdNeeded*100);
-          fill.style.width = pct + '%';
-          rAF = pct>=100 ? (task.resolve(), null) : requestAnimationFrame(loop);
-        };
-        rAF = requestAnimationFrame(loop);
-      };
-      const onUp = ()=> { if(rAF) cancelAnimationFrame(rAF); rAF=null; fill.style.width='0%'; };
-      task.el.addEventListener('pointerdown', onDown);
-      window.addEventListener('pointerup', onUp);
-      task.onDestroy = ()=> window.removeEventListener('pointerup', onUp);
-    }
-  },
-  coworker:{
-    emoji:'🙉', label:'Calm 3×', ttl: 5400, reward: 12, penalty: 14,
-    init(task){
-      let taps=0;
-      task.el.addEventListener('pointerdown', ()=>{
-        taps++;
-        task.pulse();
-        beep({freq: 450 + taps*60, duration:0.05, type:'sine', gain:0.02});
-        if(taps>=3) task.resolve();
-        else task.setLabel(`Calm ${3-taps}×`);
-      });
-    }
-  },
-  spill:{
-    emoji:'☕', label:'Scrub!', ttl: 5000, reward: 10, penalty: 12,
-    init(task){
-      // Big coffee blob
-      const blob = document.createElement('div'); blob.className='blob'; task.el.appendChild(blob);
-      const prog = document.createElement('div'); prog.className='progress';
-      const fill = document.createElement('i'); prog.appendChild(fill); task.el.appendChild(prog);
-      let scrubbing=false, dist=0, last=null;
-      const onDown = (e)=>{ scrubbing=true; last=[e.clientX,e.clientY]; };
-      const onMove = (e)=>{
-        if(!scrubbing) return;
-        const d = Math.hypot(e.clientX-last[0], e.clientY-last[1]); last=[e.clientX,e.clientY];
-        dist += d;
-        fill.style.width = Math.min(100, dist/180*100)+'%';
-        if(dist>=180) task.resolve();
-      };
-      const onUp = ()=> scrubbing=false;
-      task.el.addEventListener('pointerdown', onDown);
-      task.el.addEventListener('pointermove', onMove);
-      window.addEventListener('pointerup', onUp);
-      task.onDestroy = ()=> window.removeEventListener('pointerup', onUp);
-    }
-  }
-};
-
-class Task {
-  constructor(type){
-    this.type = type;
-    this.spec = TYPES[type];
-    this.created = performance.now();
-    this.el = document.createElement('div');
-    this.el.className = `task ${type}`;
-    this.el.style.left = Math.round(RAND(6, gameEl.clientWidth-100))+'px';
-    this.el.style.top  = Math.round(RAND(6, gameEl.clientHeight-100))+'px';
-
-    const ring = document.createElement('div'); ring.className='ring';
-    this.el.appendChild(ring);
-
-    const icon = document.createElement('div'); icon.className='icon'; icon.textContent=this.spec.emoji;
-    const label = document.createElement('div'); label.className='label'; label.textContent=this.spec.label;
-    this.el.append(icon,label);
-
-    gameEl.appendChild(this.el);
-    state.tasks.add(this);
-
-    // Timeout for failure
-    this.expireId = setTimeout(()=> this.fail(), this.spec.ttl);
-    state.timers.add(this.expireId);
-
-    // Attach interactions
-    this.spec.init(this);
-  }
-  setLabel(text){ this.el.querySelector('.label').textContent = text; }
-  pulse(){ this.el.classList.remove('shake'); void this.el.offsetWidth; this.el.classList.add('shake'); }
-  resolve(){
-    if(this.resolved) return;
-    this.resolved = true;
-    clearTimeout(this.expireId); state.timers.delete(this.expireId);
-    addScore(this.spec.reward);
-    adjustEnergy(+3);
-    adjustStress(-5);
-    toastMsg(['Nice save!','Crisis averted!','On it!'][Math.floor(Math.random()*3)]);
-    beep({freq:760, duration:.09, type:'triangle', gain:.035});
-    this.destroy();
-  }
-  fail(){
-    if(this.resolved) return;
-    this.pulse();
-    adjustStress(+this.spec.penalty);
-    adjustEnergy(-6);
-    beep({freq:220, duration:.12, type:'sawtooth', gain:.04});
-    this.destroy();
-  }
-  destroy(instantly){
-    if(this.onDestroy) try{this.onDestroy();}catch{}
-    state.tasks.delete(this);
-    if(instantly){ this.el.remove(); return; }
-    this.el.style.transition='transform .14s, opacity .14s';
-    this.el.style.transform='scale(.8) rotate(-6deg)';
-    this.el.style.opacity='0';
-    setTimeout(()=> this.el.remove(), 160);
-  }
-}
-
-/* ========= Game Flow ========= */
-function spawnOne(){
-  if(!state.running || state.paused) return;
-  const r = Math.random();
-  const type = r<.28 ? 'phone' : r<.52 ? 'laptop' : r<.78 ? 'coworker' : 'spill';
-  new Task(type);
-}
-
-function addScore(n){ state.score+=n; scoreEl.textContent=state.score; }
-
-function adjustStress(n){
-  state.stress = Math.max(0, Math.min(100, state.stress + n));
-  stressFill.style.width = state.stress + '%';
-  if(state.stress>=100) return endGame('Stress overload! The office imploded.');
-}
-
-function adjustEnergy(n){
-  state.energy = Math.max(0, Math.min(100, state.energy + n));
-  energyFill.style.width = state.energy + '%';
-}
-
-function startGame(){
-  reset();
-  startScreen.style.display='none';
-  gameOverEl.style.display='none';
-  state.running=true;
-  beep({freq:520, duration:.14, type:'sine', gain:.05});
-
-  // Main timers
-  const secTimer = setInterval(()=>{
-    if(!state.running || state.paused) return;
-    state.time--; timeEl.textContent=state.time;
-    if(state.time<=0) endGame('Shift complete. Chaos contained.');
-  }, 1000);
-
-  
-  const diffTimer = setInterval(()=>{
-    if(!state.running) return;
-    // Smooth difficulty curve: shrink spawn interval by 12% every 8s
-    state.spawnMs = Math.max(state.minSpawnMs, state.spawnMs * 0.88);
-  }, 8000);
-
-  // Micro scheduler that spawns according to dynamic spawnMs
-  let last = performance.now();
-  function tick(){
-    if(!state.running) return;
-    const t = performance.now();
-    if(!state.paused && (t-last)>=state.spawnMs){
-      spawnOne(); last=t;
-    }
-    requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-
-  state.timers.add(secTimer); state.timers.add(diffTimer);
-}
-
-function endGame(reason){
-  state.running=false;
-  gameOverEl.style.display='flex';
-  finalStatsEl.innerHTML = `<p>${reason}</p>
-    <p><b>Score:</b> ${state.score} &nbsp; • &nbsp; <b>Time left:</b> ${state.time}s</p>`;
-}
-
-function togglePause(){
-  if(!state.running) return;
-  state.paused = !state.paused;
-  pauseBtn.textContent = state.paused ? 'Resume' : 'Pause';
-  toastMsg(state.paused ? 'Paused' : 'Resume');
-  beep({freq: state.paused?300:600, duration:.06, type:'square', gain:.03});
-}
-
-/* ========= UI / Helpers ========= */
-function toastMsg(msg){
-  toast.textContent = msg;
-  toast.style.display='block';
-  toast.style.opacity='1';
-  clearTimeout(toast._id);
-  toast._id = setTimeout(()=>{
-    toast.style.transition='opacity .5s';
-    toast.style.opacity='0';
-    setTimeout(()=>{toast.style.display='none'; toast.style.transition='';}, 520);
-  }, 700);
-}
-
-/* ========= Wire up ========= */
-document.getElementById('startBtn').addEventListener('click', startGame);
-document.getElementById('restartBtn').addEventListener('click', startGame);
-pauseBtn.addEventListener('click', togglePause);
-
-// Mute toggle
-function updateMuteLabel(){
-  muteBtn.textContent = settings.muted ? 'Unmute 🔊' : 'Mute 🔇';
-  muteBtn.setAttribute('aria-pressed', settings.muted ? 'true' : 'false');
-}
-muteBtn.addEventListener('click', ()=>{
-  settings.muted = !settings.muted;
-  localStorage.setItem('kk_muted', settings.muted);
-  updateMuteLabel();
-  toastMsg(settings.muted ? 'Muted' : 'Sound on');
-});
-updateMuteLabel();
-
-window.addEventListener('keydown', (e)=>{ if(e.code==='Space'){ e.preventDefault(); togglePause(); }});
-
-/* Accessibility: enable audio on first interaction on iOS */
-window.addEventListener('pointerdown', ()=>{ if(!audioCtx) try{audioCtx = new (window.AudioContext||window.webkitAudioContext)();}catch{} }, {once:true});
-
-/* ---- Mobile hardening: block double-tap zoom, pinch-zoom, text selection & callout ---- */
-(function(){
-  const opts = { passive: false };
-  // Block pinch-zoom and multi-touch gestures from triggering zoom
-  document.addEventListener('touchstart', (e)=>{ if(e.touches.length > 1) e.preventDefault(); }, opts);
-  // Block double-tap to zoom
-  let lastTouchEnd = 0;
-  document.addEventListener('touchend', (e)=>{
-    const t = Date.now();
-    if(t - lastTouchEnd <= 350) e.preventDefault();
-    lastTouchEnd = t;
-  }, opts);
-  // iOS Safari specific
-  document.addEventListener('gesturestart', (e)=> e.preventDefault());
-  // Prevent long-press context/select UI
-  document.addEventListener('contextmenu', (e)=> e.preventDefault());
-  document.addEventListener('selectstart', (e)=> e.preventDefault());
-  // Prevent dblclick zoom on some browsers
-  document.addEventListener('dblclick', (e)=> e.preventDefault(), opts);
+    console.assert(typeof togglePause==='function','togglePause should exist');
+    console.assert(typeof startGame==='function','startGame should exist');
+    console.assert(typeof beep==='function','beep should exist');
+    console.assert(document.getElementById('startBtn'), 'start button exists');
+    const before=settings.muted;muteBtn.click();console.assert(settings.muted!==before,'mute toggle flips');muteBtn.click();
+  }catch(e){ console.error('Self-tests failed', e); }
 })();
-
-// Robust audio unlock for iOS Safari and resume on visibility changes
-(function(){
-  const once = ()=>{ try{ unlockAudioOnce(); }catch{} ensureAudio(); remove(); };
-  const events = ['pointerdown','touchend','click','keydown'];
-  function remove(){ events.forEach(ev=> window.removeEventListener(ev, once, true)); }
-  events.forEach(ev=> window.addEventListener(ev, once, {once:true, capture:true}));
-})();
-
-document.addEventListener('visibilitychange', ()=>{
-  if(document.visibilityState==='visible' && audioCtx && audioCtx.state==='suspended'){
-    audioCtx.resume().catch(()=>{});
-  }
-});
 </script>
 </body>
 </html>
